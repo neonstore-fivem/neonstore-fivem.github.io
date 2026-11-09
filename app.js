@@ -72,6 +72,13 @@
         return '#/package/' + encodeURIComponent(p.id);
     }
 
+    function isPlaceholder(h) {
+        var t = stripHtml(h).toLowerCase();
+        return t.indexOf('this is a custom page which you can add') !== -1 ||
+            t.indexOf('from within the tebex store control panel') !== -1 ||
+            t.indexOf('lorem ipsum') !== -1;
+    }
+
     function stripHtml(h) {
         var d = document.createElement('div');
         d.innerHTML = h || '';
@@ -875,8 +882,9 @@
             api(API + '/pages').catch(function () { return { data: [] }; })
         ]).then(function (res) {
             state.store = res[0] && res[0].data;
+            if (state.store && isPlaceholder(state.store.description)) state.store.description = '';
             state.categories = (res[1] && res[1].data) || [];
-            state.pages = (res[2] && res[2].data) || [];
+            state.pages = ((res[2] && res[2].data) || []).filter(function (p) { return !isPlaceholder(p.content); });
             var seen = {};
             state.categories.forEach(function (c) {
                 (c.packages || []).forEach(function (p) {
