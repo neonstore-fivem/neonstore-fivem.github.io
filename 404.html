@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Store</title>
+    <meta name="theme-color" content="#0a0610">
+    <style>
+        body { margin: 0; min-height: 100vh; background: #09060e; }
+    </style>
+    <script>
+        (function () {
+            var parts = window.location.pathname.split('/').filter(Boolean);
+            var base = '/';
+            var route = parts.join('/');
+            if (route === 'index.html') route = '';
+            if (route === 'checkout/basket' || route === 'basket') route = 'checkout';
+            window.location.replace(base + '#/' + route + window.location.search);
+        })();
+    </script>
+</head>
+<body></body>
+</html>
